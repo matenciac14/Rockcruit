@@ -34,8 +34,8 @@ export function categorizeResults(
   
   results.forEach(result => {
     // Verificar criterios de categorización
-    const isRelevant = result.relevance_score ? 
-      result.relevance_score >= mergedCriteria.minRelevanceScore : true;
+    const isRelevant = result.score ? 
+      result.score >= mergedCriteria.minRelevanceScore : true;
     
     let isRecent = true;
     if (mergedCriteria.requiresRecent && result.published_date) {
@@ -44,11 +44,11 @@ export function categorizeResults(
       isRecent = daysOld <= mergedCriteria.maxAgeInDays;
     }
     
-    const hasSubstantialContent = result.content.length >= mergedCriteria.contentLengthThreshold;
+    const hasSubstantialContent = result.text.length >= mergedCriteria.contentLengthThreshold;
     
     const containsKeyPhrases = mergedCriteria.keyPhrases.some(phrase => 
       result.title.toLowerCase().includes(phrase.toLowerCase()) || 
-      result.content.toLowerCase().includes(phrase.toLowerCase())
+      result.text.toLowerCase().includes(phrase.toLowerCase())
     );
     
     // Decidir categoría

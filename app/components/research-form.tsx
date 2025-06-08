@@ -49,7 +49,14 @@ export function ResearchForm() {
         <CardTitle>Iniciar investigación</CardTitle>
       </CardHeader>
       <CardContent>
-        <form action={onSubmit} className="space-y-6">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            onSubmit(formData);
+          }}
+          className="space-y-6"
+        >
           <div className="space-y-2">
             <Input
               name="topic"

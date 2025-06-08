@@ -1,52 +1,56 @@
-import axios from 'axios';
+import Exa from 'exa-js';
 import { z } from 'zod';
 
-const exaApiKey = process.env.EXA_API_KEY;
-const exaApiUrl = 'https://api.exa.ai/research';
+const exaApiKey = process.env.EXA_API_KEY!;
+const exa = new Exa(exaApiKey);
 
-// Definimos un esquema para los resultados de la investigación
+// Esquema de validación con zod
 const ResearchResultSchema = z.object({
   id: z.string(),
   title: z.string(),
   url: z.string(),
-  content: z.string(),
-  source: z.string(),
   published_date: z.string().optional(),
-  relevance_score: z.number().optional(),
+  author: z.string().optional(),
+  content: z.string().optional(),
+  text: z.string(),
+  score: z.number().optional(),
+  Highlights: z.array(z.string()).optional(),
+  highlightScores: z.array(z.number()).optional(),
+  image: z.string().optional(),
+  favicon: z.string().optional(),
 });
+
 
 export type ResearchResult = z.infer<typeof ResearchResultSchema>;
 
-export async function searchWithExa(query: string, limit: number = 10) {
+export async function searchWithExa(query: string, limit: number = 1): Promise<ResearchResult[]> {
   try {
-    const response = await axios.post(
-      exaApiUrl,
-      {
-        query,
-        limit,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${exaApiKey}`,
-        },
-      }
-    );
+    const data = await exa.searchAndContents(query, {
+      text: true,
+      highlights: true,
+      numResults: limit,
+    });
 
-    // Validar y procesar la respuesta
-    const results = response.data.results || [];
-    console.log('====>Exa search results:', results);
-    return results.map((result: any) => 
+    const results = data.results || [];
+
+
+    return results.map((result : any ) =>
       ResearchResultSchema.parse({
-        id: result.id || `id-${Date.now()}-${Math.random()}`,
+        id: result.documentId || `id-${Date.now()}-${Math.random()}`,
         title: result.title || 'Untitled',
         url: result.url || '',
-        content: result.snippet || result.content || '',
-        source: result.source || 'Unknown source',
-        published_date: result.published_date,
-        relevance_score: result.relevance_score || 0,
+        published_date: result.publishedDate,
+        author: result.author || 'Unknown author',
+        content: result.content || '',
+        text: result.text || result.snippet || '',
+        score: result.score || 0,
+        Highlights: result.highlights || [],
+        highlightScores: result.highlightScores || [],
+        image: result.image || '',
+        favicon: result.favicon || '',
       })
     );
+
   } catch (error) {
     console.error('Error searching with Exa:', error);
     throw new Error('Failed to retrieve research results');

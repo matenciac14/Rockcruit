@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { ContentEditor } from "@/components/content-editor"
 import { Button } from "@/components/ui/button"
-import { ResearchResult } from "@/services/exa-service"
 import Link from "next/link"
+import { ResearchResult } from "@/app/services/exa-service";
+import { ContentEditor } from "@/app/components/content-editor";
 
 export default function EditorPage() {
   const params = useParams()

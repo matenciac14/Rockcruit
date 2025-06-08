@@ -1,8 +1,8 @@
-import { CategorizedList } from "@/components/categorized-list"
-import { searchWithExa } from "@/services/exa-service"
-import { categorizeResults } from "@/services/categorization"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { CategorizedList } from "../components/categorized-list";
+import { categorizeResults } from "../services/categorization";
+import { searchWithExa } from "../services/exa-service";
 
 async function getResearchResults() {
   // Aquí normalmente obtendríamos resultados de algún estado

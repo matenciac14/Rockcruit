@@ -1,6 +1,6 @@
+import { categorizeResults } from '@/app/services/categorization';
+import { searchWithExa } from '@/app/services/exa-service';
 import { NextResponse } from 'next/server'
-import { searchWithExa } from '@/services/exa-service'
-import { categorizeResults } from '@/services/categorization'
 
 export async function POST(request: Request) {
   try {
