@@ -1,43 +1,27 @@
-'use server'
+// app/lib/actions/generate-titles.ts
 
-import OpenAI from 'openai';
+'use server';
+
+import { generateObject } from 'ai';
 import { z } from 'zod';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { openai } from '@ai-sdk/openai';
 
 const TitlesResponseSchema = z.object({
   titles: z.array(z.string()),
 });
 
-export async function generateTitles(content: string, count: number = 5) {
+export async function generateTitles(content: string, count: number = 5): Promise<string[]> {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
-      messages: [
-        {
-          role: "system",
-          content: `You are an expert headline writer. Generate ${count} compelling, unique titles for an article. Return ONLY a valid JSON array of strings with the format: {"titles": ["Title 1", "Title 2", ...]}`,
-        },
-        {
-          role: "user",
-          content: `Create ${count} engaging titles for this article content: ${content.substring(0, 1000)}...`,
-        }
-      ],
-      response_format: { type: "json_object" },
+    const { object: validated } = await generateObject({
+      model: openai('gpt-4o'),
+      schema: TitlesResponseSchema,
       temperature: 0.7,
+      prompt: `You are an expert headline writer. Generate ${count} compelling, unique titles for this article:\n\n${content.substring(0, 1000)}\n\nReturn only a valid JSON like: { "titles": ["...", "..."] }`,
     });
 
-    const responseText = response.choices[0]?.message?.content || '{"titles": []}';
-    const parsedResponse = JSON.parse(responseText);
-    
-    // Validar la respuesta con Zod
-    const validatedResponse = TitlesResponseSchema.parse(parsedResponse);
-    
-    return validatedResponse.titles;
+    return validated.titles;
   } catch (error) {
-    console.error('Title generation error:', error);
+    console.error('❌ Error generating titles:', error);
     return [
       "Default Title 1: Exploring the Topic",
       "Default Title 2: A Comprehensive Overview",
