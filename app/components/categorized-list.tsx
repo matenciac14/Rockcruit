@@ -25,7 +25,7 @@ export function CategorizedList({
   notWorthExpanding,
 }: CategorizedListProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("worthExpanding");
+  const [setActiveTab] = useState("worthExpanding");
 
   function navigateToEditor(result: ResearchResult) {
     // Codificar resultado como parámetros de URL o usar estado global/localStorage

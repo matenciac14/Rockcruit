@@ -20,10 +20,29 @@ const ResearchResultSchema = z.object({
   favicon: z.string().optional(),
 });
 
-
 export type ResearchResult = z.infer<typeof ResearchResultSchema>;
 
-export async function searchWithExa(query: string, limit: number = 10): Promise<ResearchResult[]> {
+type ExaSearchResult = {
+  documentId?: string | null;
+  title?: string | null;
+  url?: string | null;
+  publishedDate?: string | null;
+  author?: string | null;
+  content?: string | null;
+  text?: string | null;
+  snippet?: string | null;
+  score?: number | null;
+  highlights?: string[] | null;
+  highlightScores?: number[] | null;
+  image?: string | null;
+  favicon?: string | null;
+};
+
+
+export async function searchWithExa(
+  query: string,
+  limit: number = 10
+): Promise<ResearchResult[]> {
   try {
     const data = await exa.searchAndContents(query, {
       text: true,
@@ -33,8 +52,7 @@ export async function searchWithExa(query: string, limit: number = 10): Promise<
 
     const results = data.results || [];
 
-
-    return results.map((result: any) =>
+    return results.map((result: ExaSearchResult) =>
       ResearchResultSchema.parse({
         id: result.documentId || `id-${Date.now()}-${Math.random()}`,
         title: result.title || 'Untitled',
@@ -50,7 +68,6 @@ export async function searchWithExa(query: string, limit: number = 10): Promise<
         favicon: result.favicon || '',
       })
     );
-
   } catch (error) {
     console.error('Error searching with Exa:', error);
     throw new Error('Failed to retrieve research results');

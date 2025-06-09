@@ -34,26 +34,20 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
     useState<string>("journalistic");
   const [isReinterpreting, setIsReinterpreting] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [shouldGenerate, setShouldGenerate] = useState(false);
 
   const { messages, input, setInput, handleSubmit } = useChat({
     api: "/api/generate",
-    // body: {
-    //   sourceUrl: initialData.url,
-    //   context: `${initialData.title}. ${initialData.text}`,
-    // },
     onResponse: () => {
-      console.log("🟡 Streaming iniciado...");
       setIsGenerating(true);
     },
     onFinish(message) {
-      console.log("✅ Streaming finalizado. Mensaje recibido:", message);
-      console.log("Artículo completo:", message.content);
       setContent(message.content);
       setIsGenerating(false);
     },
-      onError: (err) => {
-    console.error("❌ Error en generación:", err);
-  },
+    onError: (err) => {
+      console.error("❌ Error en generación:", err);
+    },
   });
 
   const { messages: reinterpMessages, handleSubmit: handleReinterpretSubmit } =
@@ -68,6 +62,13 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
     setTitles([]);
     setSelectedTitle("");
   }, [content]);
+
+  useEffect(() => {
+    if (shouldGenerate && input) {
+      handleSubmit();
+      setShouldGenerate(false);
+    }
+  }, [shouldGenerate, input, handleSubmit]);
 
   async function handleGenerateTitles() {
     if (!content) return;
@@ -142,14 +143,8 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
                   <div className="flex justify-center py-8">
                     <Button
                       onClick={() => {
-                        console.log("🔘 Botón clickeado");
-                        setInput("generate");
-                        handleSubmit(undefined, {
-                          body: {
-                            sourceUrl: initialData.url,
-                            context: `${initialData.title}. ${initialData.text}`,
-                          },
-                        });
+                        setInput(`${initialData.title}. ${initialData.text}`);
+                        setShouldGenerate(true);
                       }}
                     >
                       Generar artículo inicial
