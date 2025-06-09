@@ -224,7 +224,11 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
                 </Select>
 
                 <Button
-                  onClick={() => handleReinterpretSubmit(content)}
+                  onClick={() =>
+                    handleReinterpretSubmit(undefined, {
+                      body: { content, style: reinterpretationStyle },
+                    })
+                  }
                   disabled={!content || isReinterpreting}
                   className="w-full"
                 >

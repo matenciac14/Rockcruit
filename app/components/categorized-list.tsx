@@ -25,7 +25,7 @@ export function CategorizedList({
   notWorthExpanding,
 }: CategorizedListProps) {
   const router = useRouter();
-  const [setActiveTab] = useState("worthExpanding");
+  const [activeTab, setActiveTab] = useState("worthExpanding");
 
   function navigateToEditor(result: ResearchResult) {
     // Codificar resultado como parámetros de URL o usar estado global/localStorage
@@ -37,7 +37,7 @@ export function CategorizedList({
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Resultados de la investigación</h2>
 
-      <Tabs defaultValue="worthExpanding" onValueChange={setActiveTab}>
+      <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="worthExpanding">
             Vale la pena expandir{" "}
