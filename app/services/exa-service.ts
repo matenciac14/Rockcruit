@@ -4,7 +4,6 @@ import { z } from 'zod';
 const exaApiKey = process.env.EXA_API_KEY!;
 const exa = new Exa(exaApiKey);
 
-// Esquema de validación con zod
 const ResearchResultSchema = z.object({
   id: z.string(),
   title: z.string(),

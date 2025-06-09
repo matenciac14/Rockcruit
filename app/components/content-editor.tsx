@@ -62,7 +62,6 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
     onError: (err) => console.error("❌ Error reinterpretando:", err),
   });
 
-  // Generar artículo al hacer clic
   useEffect(() => {
     if (shouldGenerate && input) {
       handleSubmit(undefined, {
@@ -75,7 +74,6 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
     }
   }, [shouldGenerate, input]);
 
-  // Reinterpretar artículo
   useEffect(() => {
     if (shouldReinterpret && reinterpInput) {
       handleReinterpretSubmit(undefined, {

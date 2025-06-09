@@ -5,7 +5,7 @@ interface CategorizedResults {
   notWorthExpanding: ResearchResult[];
 }
 
-// Criterios para la categorización
+// Criteria for categorization
 interface CategorizationCriteria {
   minRelevanceScore: number;
   requiresRecent: boolean;
@@ -14,7 +14,7 @@ interface CategorizationCriteria {
   keyPhrases: string[];
 }
 
-// Criterios predeterminados
+// Default criteria
 const DEFAULT_CRITERIA: CategorizationCriteria = {
   minRelevanceScore: 0.7,
   requiresRecent: true,
@@ -33,7 +33,6 @@ export function categorizeResults(
   const notWorthExpanding: ResearchResult[] = [];
   
   results.forEach(result => {
-    // Verificar criterios de categorización
     const isRelevant = result.score ? 
       result.score >= mergedCriteria.minRelevanceScore : true;
     
@@ -51,7 +50,6 @@ export function categorizeResults(
       result.text.toLowerCase().includes(phrase.toLowerCase())
     );
     
-    // Decidir categoría
     if (isRelevant && isRecent && (hasSubstantialContent || containsKeyPhrases)) {
       worthExpanding.push(result);
     } else {
