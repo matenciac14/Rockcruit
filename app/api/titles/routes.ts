@@ -1,5 +1,5 @@
+import { generateTitles } from '@/app/lib/actions/generate-titles';
 import { NextResponse } from 'next/server'
-import { generateTitles } from '@/lib/actions/generate-titles'
 
 export async function POST(req: Request) {
   try {

@@ -58,7 +58,7 @@ export function categorizeResults(
       notWorthExpanding.push(result);
     }
   });
-  
+
   return {
     worthExpanding,
     notWorthExpanding

@@ -12,7 +12,7 @@ async function getResearchResults() {
   // Nota: en producción, recuperaríamos de la base de datos o estado
   try {
     // Intenta recuperar de caché/estado o ejecuta una búsqueda con un tema predeterminado
-    const demoTopic = "Avances en Inteligencia Artificial";
+    const demoTopic = "Tecnologia 5g";
     const results = await searchWithExa(demoTopic);
     return categorizeResults(results);
   } catch (error) {

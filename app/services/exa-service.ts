@@ -23,7 +23,7 @@ const ResearchResultSchema = z.object({
 
 export type ResearchResult = z.infer<typeof ResearchResultSchema>;
 
-export async function searchWithExa(query: string, limit: number = 1): Promise<ResearchResult[]> {
+export async function searchWithExa(query: string, limit: number = 10): Promise<ResearchResult[]> {
   try {
     const data = await exa.searchAndContents(query, {
       text: true,
@@ -34,7 +34,7 @@ export async function searchWithExa(query: string, limit: number = 1): Promise<R
     const results = data.results || [];
 
 
-    return results.map((result : any ) =>
+    return results.map((result: any) =>
       ResearchResultSchema.parse({
         id: result.documentId || `id-${Date.now()}-${Math.random()}`,
         title: result.title || 'Untitled',

@@ -1,7 +1,8 @@
 'use server'
 
-import { streamArticleGeneration, streamArticleReinterpretation } from '@/services/openai-service';
-import { revalidatePath } from 'next/cache';
+import { streamArticleGeneration, streamArticleReinterpretation } from "@/app/services/openai-service";
+
+
 
 export async function generateArticleFromResearch(context: string, sourceUrl?: string) {
   try {
