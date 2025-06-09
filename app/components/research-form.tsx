@@ -34,6 +34,10 @@ export function ResearchForm() {
     try {
       const result = await performResearch(formData);
       if (result.success) {
+         // ✅ Guardar en localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("latestResearchResults", JSON.stringify(result.results));
+      }
         router.push("/research");
       }
     } catch (error) {

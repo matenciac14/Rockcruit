@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { useState } from "react";
@@ -16,20 +18,19 @@ import { Button } from "@/components/ui/button";
 import { BadgeCheckIcon } from "lucide-react";
 
 interface CategorizedListProps {
-  worthExpanding: ResearchResult[];
-  notWorthExpanding: ResearchResult[];
+  worthExpanding?: ResearchResult[];
+  notWorthExpanding?: ResearchResult[];
 }
 
 export function CategorizedList({
-  worthExpanding,
-  notWorthExpanding,
+  worthExpanding = [],
+  notWorthExpanding = [],
 }: CategorizedListProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("worthExpanding");
 
   function navigateToEditor(result: ResearchResult) {
-    // Codificar resultado como parámetros de URL o usar estado global/localStorage
-    localStorage.setItem("selectedResult", JSON.stringify(result));
+    localStorage.setItem("latestResearchResults", JSON.stringify(result));
     router.push(`/editor/${result.id}`);
   }
 
@@ -42,13 +43,13 @@ export function CategorizedList({
           <TabsTrigger value="worthExpanding">
             Vale la pena expandir{" "}
             <Badge variant="outline" className="ml-2">
-              {worthExpanding.length}
+              {worthExpanding?.length ?? 0}
             </Badge>
           </TabsTrigger>
           <TabsTrigger value="notWorthExpanding">
             No vale la pena expandir{" "}
             <Badge variant="outline" className="ml-2">
-              {notWorthExpanding.length}
+              {notWorthExpanding?.length ?? 0}
             </Badge>
           </TabsTrigger>
         </TabsList>
@@ -64,7 +65,7 @@ export function CategorizedList({
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">{result.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="pb-2">
+                <CardContent className="pb-2 max-h-[40vh] overflow-y-auto overflow-x-hidden w-full">
                   <p className="text-sm text-muted-foreground mb-2">
                     {result.text}
                   </p>
@@ -74,7 +75,7 @@ export function CategorizedList({
                       variant="outline"
                     >
                       <BadgeCheckIcon />
-                      Highlights: {result.Highlights?.length}
+                      Highlights: {result.Highlights?.length ?? 0}
                     </Badge>
                     {result.published_date && (
                       <Badge variant="outline">
@@ -91,6 +92,7 @@ export function CategorizedList({
                     )}
                   </div>
                 </CardContent>
+
                 <CardFooter>
                   <div className="flex gap-2 mt-2">
                     <Button size="sm" onClick={() => navigateToEditor(result)}>
@@ -133,7 +135,7 @@ export function CategorizedList({
                       variant="outline"
                     >
                       <BadgeCheckIcon />
-                      Highlights: {result.Highlights?.length}
+                      Highlights: {result.Highlights?.length ?? 0}
                     </Badge>
                     {result.published_date && (
                       <Badge variant="outline">

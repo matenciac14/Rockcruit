@@ -16,7 +16,7 @@ export default function EditorPage() {
     // En una aplicación real, obtendríamos esto de un API endpoint
     // Para esta demo, lo obtenemos de localStorage
     try {
-      const savedResult = localStorage.getItem('selectedResult')
+      const savedResult = localStorage.getItem('latestResearchResults')
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult) as ResearchResult
         if (parsedResult.id === params.id) {

@@ -1,32 +1,46 @@
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { CategorizedList } from "../components/categorized-list";
-import { categorizeResults } from "../services/categorization";
-import { searchWithExa } from "../services/exa-service";
+"use client";
 
-async function getResearchResults() {
-  // Aquí normalmente obtendríamos resultados de algún estado
-  // persistente (base de datos, Redis, etc.).
-  // Para demostración, generaremos datos simulados:
-  
-  // Nota: en producción, recuperaríamos de la base de datos o estado
-  try {
-    // Intenta recuperar de caché/estado o ejecuta una búsqueda con un tema predeterminado
-    const demoTopic = "Tecnologia 5g";
-    const results = await searchWithExa(demoTopic);
-    return categorizeResults(results);
-  } catch (error) {
-    console.error("Error getting research results:", error);
-    return {
-      worthExpanding: [],
-      notWorthExpanding: []
-    };
-  }
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { CategorizedList } from "../components/categorized-list";
+import { ResearchResult } from "../services/exa-service";
+
+interface CategorizedResults {
+  worthExpanding: ResearchResult[];
+  notWorthExpanding: ResearchResult[];
 }
 
-export default async function ResearchPage() {
-  const { worthExpanding, notWorthExpanding } = await getResearchResults();
-  
+export default function ResearchPage() {
+  const [results, setResults] = useState<CategorizedResults>({
+    worthExpanding: [],
+    notWorthExpanding: [],
+  });
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("latestResearchResults");
+      if (!raw) return;
+
+      const parsed = JSON.parse(raw);
+
+      if (
+        typeof parsed === "object" &&
+        Array.isArray(parsed.worthExpanding) &&
+        Array.isArray(parsed.notWorthExpanding)
+      ) {
+        setResults({
+          worthExpanding: parsed.worthExpanding,
+          notWorthExpanding: parsed.notWorthExpanding,
+        });
+      } else {
+        console.warn("Formato inesperado en localStorage:", parsed);
+      }
+    } catch (e) {
+      console.error("Error parsing localStorage data:", e);
+    }
+  }, []);
+
   return (
     <main className="container max-w-4xl mx-auto py-10 px-4">
       <div className="mb-6">
@@ -34,13 +48,13 @@ export default async function ResearchPage() {
           <Link href="/">← Volver al inicio</Link>
         </Button>
       </div>
-      
+
       <div className="space-y-6">
-        <CategorizedList 
-          worthExpanding={worthExpanding} 
-          notWorthExpanding={notWorthExpanding} 
+        <CategorizedList
+          worthExpanding={results.worthExpanding}
+          notWorthExpanding={results.notWorthExpanding}
         />
       </div>
     </main>
-  )
+  );
 }
