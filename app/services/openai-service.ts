@@ -35,6 +35,7 @@ export function streamArticleGeneration(context: string, sourceUrl?: string) {
       { role: 'user', content: prompt }
     ],
     temperature: 0.7,
+     maxTokens: 800,
   });
 }
 
