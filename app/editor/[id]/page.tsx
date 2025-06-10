@@ -19,7 +19,7 @@ export default function EditorPage() {
     // For this demo, we get it from localStorage
 
     try {
-      const savedResult = localStorage.getItem("latestResearchResults");
+      const savedResult = localStorage.getItem("detailResearchResults");
       if (savedResult) {
         const parsedResult = JSON.parse(savedResult) as ResearchResult;
         if (parsedResult.id === params.id) {

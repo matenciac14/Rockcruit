@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -30,7 +30,7 @@ export function CategorizedList({
   const [activeTab, setActiveTab] = useState("worthExpanding");
 
   function navigateToEditor(result: ResearchResult) {
-    localStorage.setItem("latestResearchResults", JSON.stringify(result));
+    localStorage.setItem("detailResearchResults", JSON.stringify(result));
     router.push(`/editor/${result.id}`);
   }
 
@@ -125,7 +125,7 @@ export function CategorizedList({
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">{result.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="pb-2">
+                <CardContent className="pb-2 max-h-[40vh] overflow-y-auto overflow-x-hidden w-full">
                   <p className="text-sm text-muted-foreground mb-2">
                     {result.text || "No hay descripción disponible."}
                   </p>

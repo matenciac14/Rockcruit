@@ -77,7 +77,7 @@ export function ResearchForm() {
                 key={topic}
                 type="button"
                 variant="outline"
-                className="text-sm h-auto py-1 px-2 justify-start"
+                className="text-sm h-auto py-1 px-2 whitespace-normal break-words"
                 onClick={() => setSelectedTopic(topic)}
               >
                 {topic}

@@ -111,17 +111,17 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
           <CardTitle>Expandir contenido: {initialData.title}</CardTitle>
         </CardHeader>
         <CardContent>
-                      <div>
-              <h3 className="text-lg font-medium mb-2">Fuente original</h3>
-              <div className="bg-muted p-4 rounded-md text-sm">
-                <p className="mb-2">
-                  <strong>Título:</strong> {initialData.title}
-                </p>
-                <p className="mb-2">
-                  <strong>Fuente:</strong> {initialData.url}
-                </p>
-                <p>
-                  <strong>Contenido:</strong> {initialData.text}
+          <div className="pb-2 max-h-[40vh] overflow-y-auto overflow-x-hidden w-full">
+            <h3 className="text-lg font-medium mb-2">Fuente original</h3>
+            <div className="bg-muted p-4 rounded-md text-sm">
+              <p className="mb-2">
+                <strong>Título:</strong> {initialData.title}
+              </p>
+              <p className="mb-2">
+                <strong>Fuente:</strong> {initialData.url}
+              </p>
+              <p>
+                <strong>Contenido:</strong> {initialData.text}
                 </p>
               </div>
             </div>
@@ -137,7 +137,7 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
               {isLoading ? (
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
               ) : messages.length > 0 ? (
-                <div className="prose dark:prose-invert mt-4">
+                <div className="prose dark:prose-invert mt-4 max-h-[40vh] overflow-y-auto overflow-x-hidden">
                   {messages[messages.length - 1].content.split("\n").map((line, i) => (
                     <p key={i}>{line}</p>
                   ))}
@@ -209,7 +209,7 @@ export function ContentEditor({ initialData }: ContentEditorProps) {
               </Button>
 
               {reinterpMessages.length > 0 && (
-                <div className="prose dark:prose-invert mt-4">
+                <div className="prose dark:prose-invert mt-4 max-h-[40vh] overflow-y-auto overflow-x-hidden">
                   {reinterpMessages[reinterpMessages.length - 1].content.split("\n").map((line, i) => (
                     <p key={i}>{line}</p>
                   ))}
